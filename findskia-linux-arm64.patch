@@ -1,0 +1,25 @@
+From 0bbbc302f631a807daf0b76b2d1fc4922516fd04 Mon Sep 17 00:00:00 2001
+From: Suhas Dissanayake <suhasdissa@gmail.com>
+Date: Sun, 13 Sep 2026 14:52:50 +0530
+Subject: [PATCH] build: add skia target linux-arm64
+
+---
+ cmake/FindSkia.cmake | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/cmake/FindSkia.cmake b/cmake/FindSkia.cmake
+index efc02b2..1ddca2c 100644
+--- a/cmake/FindSkia.cmake
++++ b/cmake/FindSkia.cmake
+@@ -27,6 +27,8 @@ elseif(APPLE)
+     else()
+         set(_skia_target "mac-x64")
+     endif()
++elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
++    set(_skia_target "linux-arm64")
+ else()
+     set(_skia_target "linux-x64")
+ endif()
+-- 
+2.55.0
+
