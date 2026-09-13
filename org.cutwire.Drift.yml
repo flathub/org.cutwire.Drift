@@ -2,6 +2,8 @@ app-id: org.cutwire.Drift
 runtime: org.kde.Platform
 runtime-version: "6.11"
 sdk: org.kde.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm20
 command: drift
 
 finish-args:
@@ -51,27 +53,53 @@ modules:
       - -DCMAKE_INSTALL_LIBDIR=lib
     sources:
       - type: archive
-        url: https://www.surina.net/soundtouch/soundtouch-2.4.1.tar.gz
+        url: https://github.com/CutWire-Studios/SoundTouch-Builds/releases/download/2.4.1/soundtouch-2.4.1.tar.gz
+        mirror-urls:
+          - https://www.surina.net/soundtouch/soundtouch-2.4.1.tar.gz
         sha256: e07abf20ce8f95850c280132e1f61ad400fc1f4011b7fac698a503de6aab6733
 
+  - name: gn
+    buildsystem: simple
+    build-commands:
+      - CC=gcc CXX=g++ python3 build/gen.py --no-last-commit-position --allow-warnings --out-path=out
+      - printf '#ifndef OUT_LAST_COMMIT_POSITION_H_\n#define OUT_LAST_COMMIT_POSITION_H_\n#define LAST_COMMIT_POSITION_NUM 0\n#define LAST_COMMIT_POSITION "0 (drift)"\n#endif\n' > out/last_commit_position.h
+      - ninja -C out -j${FLATPAK_BUILDER_N_JOBS} gn
+      - install -Dm755 out/gn ${FLATPAK_DEST}/bin/gn
+    sources:
+      - type: git
+        url: https://gn.googlesource.com/gn
+        commit: 0625da07ece7b1a374ec0719b6f40ebe3d0950c1
+
   - name: drift
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DDRIFT_FETCH_ONNXRUNTIME=OFF
-      - -DDRIFT_BUNDLE_ONNXRUNTIME=OFF
-      - -DONNXRUNTIME_ROOT=/app
-      - -DDRIFT_FETCH_JUCE=OFF
-      - -DDRIFT_JUCE_DIR=juce
-      - -DDRIFT_UPDATE_FEED_URL=
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/llvm20/bin
+    build-commands:
+      - case "$FLATPAK_ARCH" in x86_64) t=linux-x64 ;; aarch64) t=linux-arm64 ;; *) echo "no Skia target for $FLATPAK_ARCH" >&2; exit 1 ;; esac;
+        CC=clang CXX=clang++ JOBS=${FLATPAK_BUILDER_N_JOBS} third_party/build-skia.sh "$t"
+      - cmake -S . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=/app -DCMAKE_INSTALL_LIBDIR=lib
+        -DCMAKE_BUILD_TYPE=Release
+        -DDRIFT_WITH_SKIA=ON
+        -DDRIFT_FETCH_ONNXRUNTIME=OFF
+        -DDRIFT_BUNDLE_ONNXRUNTIME=OFF
+        -DONNXRUNTIME_ROOT=/app
+        -DDRIFT_FETCH_JUCE=OFF
+        -DDRIFT_JUCE_DIR=juce
+        -DDRIFT_UPDATE_FEED_URL=
+        -DDRIFT_AUTO_UPDATE_TRANSLATIONS=OFF
+      - cmake --build build -j${FLATPAK_BUILDER_N_JOBS}
+      - cmake --install build
     sources:
       - type: git
         url: https://github.com/CutWire-Studios/Drift.git
-        tag: v0.5.1
-        commit: 0f64ad30b5b4ce4be46e3d582e2043ee9185d470
+        tag: v0.6.0
+        commit: f525343286ca967563b67699900a2471971abf9e
       - type: git
         url: https://github.com/juce-framework/JUCE.git
         tag: 8.0.15
         commit: 91ad83ae34a81e0833b1a2b0866f54846370ae53
         dest: juce
+      - type: archive
+        url: https://github.com/google/skia/archive/e7c90ecca9444fe09598f1630ab7cee2c0ee027a.tar.gz
+        sha256: 7b5158952ebc4e2ce8de19f036b7613e266705003469579d9e98070ead62fc3b
+        dest: third_party/src/skia-e7c90ecca9444fe09598f1630ab7cee2c0ee027a
