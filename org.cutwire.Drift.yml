@@ -94,6 +94,8 @@ modules:
         url: https://github.com/CutWire-Studios/Drift.git
         tag: v0.6.0
         commit: f525343286ca967563b67699900a2471971abf9e
+      - type: patch
+        path: findskia-linux-arm64.patch
       - type: git
         url: https://github.com/juce-framework/JUCE.git
         tag: 8.0.15
