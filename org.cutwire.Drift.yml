@@ -86,16 +86,15 @@ modules:
         -DDRIFT_FETCH_JUCE=OFF
         -DDRIFT_JUCE_DIR=juce
         -DDRIFT_UPDATE_FEED_URL=
+        -DDRIFT_DISTRIBUTION=flathub
         -DDRIFT_AUTO_UPDATE_TRANSLATIONS=OFF
       - cmake --build build -j${FLATPAK_BUILDER_N_JOBS}
       - cmake --install build
     sources:
       - type: git
         url: https://github.com/CutWire-Studios/Drift.git
-        tag: v0.6.0
-        commit: f525343286ca967563b67699900a2471971abf9e
-      - type: patch
-        path: findskia-linux-arm64.patch
+        tag: v0.7.0
+        commit: a24069b643c7ebe7b8fe6d5b89f313431a7409c4
       - type: git
         url: https://github.com/juce-framework/JUCE.git
         tag: 8.0.15
