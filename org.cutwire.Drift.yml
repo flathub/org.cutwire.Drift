@@ -44,6 +44,17 @@ modules:
         only-arches:
           - aarch64
 
+  - name: libnuma
+    buildsystem: autotools
+    config-opts:
+      - --disable-static
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://github.com/numactl/numactl/releases/download/v2.0.19/numactl-2.0.19.tar.gz
+        sha256: f2672a0381cb59196e9c246bf8bcc43d5568bc457700a697f1a1df762b9af884
+
   - name: soundtouch
     buildsystem: cmake-ninja
     config-opts:
@@ -82,6 +93,7 @@ modules:
         -DDRIFT_WITH_SKIA=ON
         -DDRIFT_FETCH_ONNXRUNTIME=OFF
         -DDRIFT_BUNDLE_ONNXRUNTIME=OFF
+        -DDRIFT_BUNDLE_CORE_PACKAGES_ONLY=ON
         -DONNXRUNTIME_ROOT=/app
         -DDRIFT_FETCH_JUCE=OFF
         -DDRIFT_JUCE_DIR=juce
@@ -93,8 +105,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/CutWire-Studios/Drift.git
-        tag: v0.8.0
-        commit: e4a500c38002e73a161ebcc24b2cad5cf4fe2c8e
+        tag: v0.9.0
+        commit: c72bc882d8089de592dc47beb046fd30e87975a3
       - type: git
         url: https://github.com/juce-framework/JUCE.git
         tag: 8.0.15
