@@ -85,6 +85,8 @@ modules:
     buildsystem: simple
     build-options:
       append-path: /usr/lib/sdk/llvm20/bin
+      env:
+        CCACHE_SLOPPINESS: pch_defines,time_macros,include_file_mtime,include_file_ctime
     build-commands:
       - case "$FLATPAK_ARCH" in x86_64) t=linux-x64 ;; aarch64) t=linux-arm64 ;; *) echo "no Skia target for $FLATPAK_ARCH" >&2; exit 1 ;; esac;
         CC=clang CXX=clang++ JOBS=${FLATPAK_BUILDER_N_JOBS} third_party/build-skia.sh "$t"
@@ -105,8 +107,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/CutWire-Studios/Drift.git
-        tag: v0.9.0
-        commit: c72bc882d8089de592dc47beb046fd30e87975a3
+        tag: v0.9.1
+        commit: b2971050a84fb943722dd3a70ffead65867e7ff0
       - type: git
         url: https://github.com/juce-framework/JUCE.git
         tag: 8.0.15
