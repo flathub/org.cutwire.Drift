@@ -25,6 +25,8 @@ cleanup:
   - "*.la"
 
 modules:
+  - shared-modules/lua5.4/lua-5.4.json
+
   - name: onnxruntime-headers
     buildsystem: simple
     build-commands:
@@ -94,6 +96,7 @@ modules:
         -DCMAKE_BUILD_TYPE=Release
         -DDRIFT_WITH_SKIA=ON
         -DDRIFT_FETCH_ONNXRUNTIME=OFF
+        -DDRIFT_SYSTEM_LUA=ON
         -DDRIFT_BUNDLE_ONNXRUNTIME=OFF
         -DDRIFT_BUNDLE_CORE_PACKAGES_ONLY=ON
         -DONNXRUNTIME_ROOT=/app
@@ -107,8 +110,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/CutWire-Studios/Drift.git
-        tag: v0.9.1
-        commit: b2971050a84fb943722dd3a70ffead65867e7ff0
+        tag: v0.9.2
+        commit: a19016a5adf50864187233cd2b204f1a91f42849
       - type: git
         url: https://github.com/juce-framework/JUCE.git
         tag: 8.0.15
