@@ -104,7 +104,7 @@ modules:
       - type: git
         url: https://github.com/CutWire-Studios/Drift.git
         tag: v0.9.3
-        commit: 0cea688dd68d96390579034d7c09a82a5736cc0c
+        commit: 3af8b288ba53aa008c89a29405115a0e3f61f2ce
       - type: git
         url: https://github.com/juce-framework/JUCE.git
         tag: 8.0.15
