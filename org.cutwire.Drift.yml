@@ -31,20 +31,13 @@ modules:
     buildsystem: simple
     build-commands:
       - install -d ${FLATPAK_DEST}/include
-      - cp -a include/. ${FLATPAK_DEST}/include/
+      - cp -a headers/. ${FLATPAK_DEST}/include/
     sources:
       - type: archive
-        url: https://github.com/microsoft/onnxruntime/releases/download/v1.27.0/onnxruntime-linux-x64-1.27.0.tgz
-        sha256: 547e40a48f1fe73e3f812d7c88a948612c23f896b91e4e2ee1e232d7b468246f
-        strip-components: 1
-        only-arches:
-          - x86_64
-      - type: archive
-        url: https://github.com/microsoft/onnxruntime/releases/download/v1.27.0/onnxruntime-linux-aarch64-1.27.0.tgz
-        sha256: 3e4d83ac06924a32a07b6d7f91ce6f852876153fc0bbdf931bf517a140bfbe48
-        strip-components: 1
-        only-arches:
-          - aarch64
+        url: https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime-android/1.27.0/onnxruntime-android-1.27.0.aar
+        sha256: 077dec5e2d821234c7dc0aba584bec8f999854b546c754cab93a90741c56fbeb
+        archive-type: zip
+        strip-components: 0
 
   - name: libnuma
     buildsystem: autotools
@@ -110,8 +103,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/CutWire-Studios/Drift.git
-        tag: v0.9.2
-        commit: a19016a5adf50864187233cd2b204f1a91f42849
+        tag: v0.9.4
+        commit: dd1dc79a3df00f11d060f62871fa49106978aa5d
       - type: git
         url: https://github.com/juce-framework/JUCE.git
         tag: 8.0.15
